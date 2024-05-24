@@ -1,4 +1,4 @@
-﻿using B2B_Project.Models;
+using B2BProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
-namespace B2B_Project.Controllers
+namespace B2BProject.Controllers
 {
     public class SellerController : Controller
     {
@@ -18,40 +18,33 @@ namespace B2B_Project.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(User seller)
+        public ActionResult Login(Users seller)
         {
             using (var entities = new B2BDbEntities())
             {
-                if (string.IsNullOrEmpty(seller.Name) || string.IsNullOrEmpty(seller.Password))
+                if (string.IsNullOrEmpty(seller.Email) || string.IsNullOrEmpty(seller.Password))
                 {
-                    ViewBag.error = "Username and Password cannot be left blank!";
+                    ViewBag.error = "Email and Password cannot be left blank!";
                     return View();
                 }
 
-                var ad = entities.Users
-                    .FirstOrDefault(a => a.Name == seller.Name  && a.Password == seller.Password);
+                var bu = entities.Users.FirstOrDefault(b => b.Email == seller.Email &&
+                                                            b.Password == seller.Password &&
+                                                            b.Rol_id == 2);
 
-                if (ad != null)
+                if (bu != null)
                 {
-                    FormsAuthentication.SetAuthCookie(seller.Name, false);
-                    Session["Admin_id"] = ad.User_id.ToString();
-                    Session["Admin_name"] = ad.Name.ToString();
+                    FormsAuthentication.SetAuthCookie(seller.Email, false);
+                    Session["Role_id"] = bu.Rol_id.ToString();
+                    Session["Email"] = bu.Email.ToString();
                     return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    ViewBag.error = "Invalid Username or Password!";
+                    ViewBag.error = "Invalid Email or Password!";
                 }
             }
             return View();
-        }
-
-        public ActionResult LogOut()
-        {
-            FormsAuthentication.SignOut();
-            Session.Clear(); // Oturum verilerini temizle
-            Session.Abandon(); // Oturumu sonlandır
-            return RedirectToAction("Login");
         }
 
         [HttpGet]
@@ -59,29 +52,38 @@ namespace B2B_Project.Controllers
         {
             return View();
         }
-
-        [HttpPost]
-        public ActionResult Register(User seller)
+        public ActionResult Register(Users seller)
         {
-            var Entities = new B2BDbEntities();
+            var entities = new B2BDbEntities();
 
-            var Seller = new User
+            if (ModelState.IsValid)
             {
 
-                Name = seller.Name,
-                Surname = seller.Surname,
-                Email = seller.Email,
-                Company_name = seller.Company_name,
-                Phone = seller.Phone,
-                Password = seller.Password,
-                Rol_id = 3,
+                var Seller = new Users
+                {
+                    Name = seller.Name,
+                    Surname = seller.Surname,
+                    Email = seller.Email,
+                    Company_name = seller.Company_name,
+                    Phone = seller.Phone,
+                    Password = seller.Password,
+                    Rol_id = 2
 
-            };
+                };
 
-            Entities.Users.Add(Seller);
-            Entities.SaveChanges();
+                entities.Users.Add(Seller);
+                entities.SaveChanges();
 
-            return View();
+                return RedirectToAction("Index", "Home");
+            }
+            return View(seller);
+        }
+        public ActionResult LogOut()
+        {
+            FormsAuthentication.SignOut();
+            Session.Clear(); // Oturum verilerini temizle
+            Session.Abandon(); // Oturumu sonlandır
+            return RedirectToAction("Login");
         }
     }
 }

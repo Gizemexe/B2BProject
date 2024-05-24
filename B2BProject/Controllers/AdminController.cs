@@ -1,44 +1,46 @@
-﻿using projeb2b.Models;
-using System;
-using System.Collections.Generic;
+using B2BProject.Models;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
-namespace projeb2b.Controllers
+namespace B2BProject.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : Controller  
     {
-        // GET: Buyer
+        // GET: Admin
         [HttpGet]
+        public ActionResult Login()
+        {
+            return View();
+        }
+
         [HttpPost]
-        public ActionResult Login(User admin)
+        public ActionResult Login(Users admin)
         {
             using (var entities = new B2BDbEntities())
             {
-                if (string.IsNullOrEmpty(admin.Name) || string.IsNullOrEmpty(admin.Password))
+                if (string.IsNullOrEmpty(admin.Email) || string.IsNullOrEmpty(admin.Password))
                 {
-                    ViewBag.error = "Username and Password cannot be left blank!";
+                    ViewBag.error = "Email and Password cannot be left blank!";
                     return View();
                 }
 
-                var ad = entities.Users
-                    .FirstOrDefault(a => a.Name == admin.Name && a.Password == admin.Password);
+                var ad = entities.Users.FirstOrDefault(a => a.Email == admin.Email &&
+                                                            a.Password == admin.Password &&
+                                                            a.Rol_id == 1);
 
                 if (ad != null)
                 {
-                    FormsAuthentication.SetAuthCookie(admin.Name, false);
-                    Session["Admin_id"] = ad.User_id.ToString();
-                    Session["Admin_name"] = ad.Name.ToString();
+                    FormsAuthentication.SetAuthCookie(admin.Email, false);
+                    Session["Role_id"] = ad.Rol_id.ToString();
+                    Session["Email"] = ad.Email.ToString();
                     return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    ViewBag.error = "Invalid Username or Password!";
+                    ViewBag.error = "Invalid Email or Password!";
                 }
             }
-
             return View();
         }
 
@@ -49,7 +51,5 @@ namespace projeb2b.Controllers
             Session.Abandon(); // Oturumu sonlandır
             return RedirectToAction("Login");
         }
-
-
     }
 }

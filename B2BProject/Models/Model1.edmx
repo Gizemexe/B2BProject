@@ -23,6 +23,19 @@
           <Property Name="Category_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Category_name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Coupons">
+          <Key>
+            <PropertyRef Name="Coupon_id" />
+          </Key>
+          <Property Name="Coupon_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Coupon_Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Discount" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+          <Property Name="User_id" Type="int" Nullable="false" />
+          <Property Name="Product_id" Type="int" Nullable="false" />
+          <Property Name="Start_date" Type="datetime" Nullable="false" />
+          <Property Name="End_date" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="Messaging">
           <Key>
             <PropertyRef Name="Id" />
@@ -70,20 +83,28 @@
           <Property Name="Stock" Type="int" />
           <Property Name="Image" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Rol_id" Type="int" Nullable="false" />
+          <Property Name="Rol_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="User_id" />
           </Key>
           <Property Name="User_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Rol_id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Surname" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Company_name" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Phone" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Cart_products">
+        <Association Name="FK_Cart_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
           <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
           <ReferentialConstraint>
@@ -95,7 +116,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Cart_User">
+        <Association Name="FK_Cart_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
           <ReferentialConstraint>
@@ -103,6 +124,30 @@
               <PropertyRef Name="User_id" />
             </Principal>
             <Dependent Role="Cart">
+              <PropertyRef Name="User_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Coupons_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Coupons" Type="Self.Coupons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="Product_id" />
+            </Principal>
+            <Dependent Role="Coupons">
+              <PropertyRef Name="Product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Coupons_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Coupons" Type="Self.Coupons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="User_id" />
+            </Principal>
+            <Dependent Role="Coupons">
               <PropertyRef Name="User_id" />
             </Dependent>
           </ReferentialConstraint>
@@ -143,7 +188,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderDetails_products">
+        <Association Name="FK_OrderDetails_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
           <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
           <ReferentialConstraint>
@@ -155,7 +200,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Orders_users">
+        <Association Name="FK_Orders_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
@@ -167,7 +212,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Products_categories">
+        <Association Name="FK_Products_Categories">
           <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
@@ -179,7 +224,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Products_users">
+        <Association Name="FK_Products_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
@@ -191,21 +236,43 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Users_Rol_id">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="Rol_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="B2BDbModelStoreContainer">
           <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Coupons" EntityType="Self.Coupons" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Messaging" EntityType="Self.Messaging" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Cart_products" Association="Self.FK_Cart_products">
+          <AssociationSet Name="FK_Cart_Products" Association="Self.FK_Cart_Products">
             <End Role="Products" EntitySet="Products" />
             <End Role="Cart" EntitySet="Cart" />
           </AssociationSet>
-          <AssociationSet Name="FK_Cart_User" Association="Self.FK_Cart_User">
+          <AssociationSet Name="FK_Cart_Users" Association="Self.FK_Cart_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Coupons_Products" Association="Self.FK_Coupons_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Coupons" EntitySet="Coupons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Coupons_Users" Association="Self.FK_Coupons_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Coupons" EntitySet="Coupons" />
           </AssociationSet>
           <AssociationSet Name="FK_Messaging_Receiver" Association="Self.FK_Messaging_Receiver">
             <End Role="Users" EntitySet="Users" />
@@ -219,21 +286,25 @@
             <End Role="Orders" EntitySet="Orders" />
             <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderDetails_products" Association="Self.FK_OrderDetails_products">
+          <AssociationSet Name="FK_OrderDetails_Products" Association="Self.FK_OrderDetails_Products">
             <End Role="Products" EntitySet="Products" />
             <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK_Orders_users" Association="Self.FK_Orders_users">
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_Products_categories" Association="Self.FK_Products_categories">
+          <AssociationSet Name="FK_Products_Categories" Association="Self.FK_Products_Categories">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK_Products_users" Association="Self.FK_Products_users">
+          <AssociationSet Name="FK_Products_Users" Association="Self.FK_Products_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Rol_id" Association="Self.FK_Users_Rol_id">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -317,6 +388,7 @@
           <NavigationProperty Name="Categories" Relationship="B2BDbModel.FK_Products_categories" FromRole="Products" ToRole="Categories" />
           <NavigationProperty Name="OrderDetails" Relationship="B2BDbModel.FK_OrderDetails_products" FromRole="Products" ToRole="OrderDetails" />
           <NavigationProperty Name="Users" Relationship="B2BDbModel.FK_Products_users" FromRole="Products" ToRole="Users" />
+          <NavigationProperty Name="Coupons" Relationship="B2BDbModel.FK_Coupons_Products" FromRole="Products" ToRole="Coupons" />
         </EntityType>
         <EntityContainer Name="B2BDbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Cart" EntityType="Self.Cart" />
@@ -362,6 +434,20 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
+          <EntitySet Name="Coupons" EntityType="B2BDbModel.Coupons" />
+          <EntitySet Name="Roles" EntityType="B2BDbModel.Roles" />
+          <AssociationSet Name="FK_Coupons_Products" Association="B2BDbModel.FK_Coupons_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Coupons" EntitySet="Coupons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Coupons_Users" Association="B2BDbModel.FK_Coupons_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Coupons" EntitySet="Coupons" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Rol_id" Association="B2BDbModel.FK_Users_Rol_id">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Users">
           <Key>
@@ -370,7 +456,6 @@
           <Property Name="User_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Surname" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Company_name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Phone" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -380,6 +465,9 @@
           <NavigationProperty Name="Messaging1" Relationship="B2BDbModel.FK_Messaging_Sender" FromRole="Users" ToRole="Messaging" />
           <NavigationProperty Name="Orders" Relationship="B2BDbModel.FK_Orders_users" FromRole="Users" ToRole="Orders" />
           <NavigationProperty Name="Products" Relationship="B2BDbModel.FK_Products_users" FromRole="Users" ToRole="Products" />
+          <Property Name="Rol_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Coupons" Relationship="B2BDbModel.FK_Coupons_Users" FromRole="Users" ToRole="Coupons" />
+          <NavigationProperty Name="Roles" Relationship="B2BDbModel.FK_Users_Rol_id" FromRole="Users" ToRole="Roles" />
         </EntityType>
         <Association Name="FK_Cart_products">
           <End Type="B2BDbModel.Products" Role="Products" Multiplicity="1" />
@@ -489,6 +577,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Coupons">
+          <Key>
+            <PropertyRef Name="Coupon_id" />
+          </Key>
+          <Property Name="Coupon_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Coupon_Code" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Discount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="User_id" Type="Int32" Nullable="false" />
+          <Property Name="Product_id" Type="Int32" Nullable="false" />
+          <Property Name="Start_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="End_date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Products" Relationship="B2BDbModel.FK_Coupons_Products" FromRole="Coupons" ToRole="Products" />
+          <NavigationProperty Name="Users" Relationship="B2BDbModel.FK_Coupons_Users" FromRole="Coupons" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Rol_id" Type="Int32" Nullable="false" />
+          <Property Name="Rol_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="B2BDbModel.FK_Users_Rol_id" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <Association Name="FK_Coupons_Products">
+          <End Type="B2BDbModel.Products" Role="Products" Multiplicity="1" />
+          <End Type="B2BDbModel.Coupons" Role="Coupons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="Product_id" />
+            </Principal>
+            <Dependent Role="Coupons">
+              <PropertyRef Name="Product_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Coupons_Users">
+          <End Type="B2BDbModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="B2BDbModel.Coupons" Role="Coupons" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="User_id" />
+            </Principal>
+            <Dependent Role="Coupons">
+              <PropertyRef Name="User_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Rol_id">
+          <End Type="B2BDbModel.Roles" Role="Roles" Multiplicity="1" />
+          <End Type="B2BDbModel.Users" Role="Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="Rol_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -569,14 +717,37 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="B2BDbModel.Users">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Rol_id" ColumnName="Rol_id" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Company_name" ColumnName="Company_name" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="User_id" ColumnName="User_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Coupons">
+            <EntityTypeMapping TypeName="B2BDbModel.Coupons">
+              <MappingFragment StoreEntitySet="Coupons">
+                <ScalarProperty Name="End_date" ColumnName="End_date" />
+                <ScalarProperty Name="Start_date" ColumnName="Start_date" />
+                <ScalarProperty Name="Product_id" ColumnName="Product_id" />
+                <ScalarProperty Name="User_id" ColumnName="User_id" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Coupon_Code" ColumnName="Coupon_Code" />
+                <ScalarProperty Name="Coupon_id" ColumnName="Coupon_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="B2BDbModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="Rol_name" ColumnName="Rol_name" />
+                <ScalarProperty Name="Rol_id" ColumnName="Rol_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -594,7 +765,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

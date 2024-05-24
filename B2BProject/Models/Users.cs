@@ -22,16 +22,17 @@ namespace B2BProject.Models
             this.Messaging1 = new HashSet<Messaging>();
             this.Orders = new HashSet<Orders>();
             this.Products = new HashSet<Products>();
+            this.Coupons = new HashSet<Coupons>();
         }
     
         public int User_id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Status { get; set; }
         public string Company_name { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Password { get; set; }
+        public int Rol_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cart> Cart { get; set; }
@@ -43,5 +44,8 @@ namespace B2BProject.Models
         public virtual ICollection<Orders> Orders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Products> Products { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Coupons> Coupons { get; set; }
+        public virtual Roles Roles { get; set; }
     }
 }

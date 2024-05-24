@@ -4,10 +4,10 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ccbee5bbb67748dba67113286a5bdfb9" Name="Diagram1" ZoomLevel="55">
+      <Diagram DiagramId="ccbee5bbb67748dba67113286a5bdfb9" Name="Diagram1" ZoomLevel="66">
         <EntityTypeShape EntityType="B2BDbModel.Cart" Width="1.5" PointX="3.25" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="B2BDbModel.Categories" Width="1.5" PointX="13.625" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="B2BDbModel.Messaging" Width="1.5" PointX="0.75" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="B2BDbModel.Messaging" Width="1.5" PointX="0.625" PointY="3.625" IsExpanded="true" />
         <EntityTypeShape EntityType="B2BDbModel.OrderDetails" Width="1.5" PointX="2.875" PointY="5.25" IsExpanded="true" />
         <EntityTypeShape EntityType="B2BDbModel.Orders" Width="1.5" PointX="5.75" PointY="3.625" IsExpanded="true" />
         <EntityTypeShape EntityType="B2BDbModel.Products" Width="1.5" PointX="10.375" PointY="5.25" IsExpanded="true" />
@@ -21,6 +21,11 @@
         <AssociationConnector Association="B2BDbModel.FK_OrderDetails_products" />
         <AssociationConnector Association="B2BDbModel.FK_Orders_users" />
         <AssociationConnector Association="B2BDbModel.FK_Products_users" />
+        <EntityTypeShape EntityType="B2BDbModel.Coupons" Width="1.5" PointX="12.625" PointY="4.375" />
+        <EntityTypeShape EntityType="B2BDbModel.Roles" Width="1.5" PointX="6.125" PointY="0.875" />
+        <AssociationConnector Association="B2BDbModel.FK_Coupons_Products" />
+        <AssociationConnector Association="B2BDbModel.FK_Coupons_Users" />
+        <AssociationConnector Association="B2BDbModel.FK_Users_Rol_id" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

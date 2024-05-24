@@ -19,6 +19,7 @@ namespace B2BProject.Models
         {
             this.Cart = new HashSet<Cart>();
             this.OrderDetails = new HashSet<OrderDetails>();
+            this.Coupons = new HashSet<Coupons>();
         }
     
         public int Product_id { get; set; }
@@ -37,5 +38,7 @@ namespace B2BProject.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
         public virtual Users Users { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Coupons> Coupons { get; set; }
     }
 }

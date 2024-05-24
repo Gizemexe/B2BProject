@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿using B2BProject.Models;
+=======
+using B2BProject.Models;
+>>>>>>> f86ced1f07240feb457de30763d1968e29fb9844
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿using B2BProject.Models;
+=======
+using B2BProject.Models;
+>>>>>>> f86ced1f07240feb457de30763d1968e29fb9844
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -86,4 +90,8 @@ namespace B2BProject.Controllers
             return RedirectToAction("Login");
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f86ced1f07240feb457de30763d1968e29fb9844

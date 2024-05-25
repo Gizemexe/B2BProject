@@ -1,0 +1,37 @@
+<!--Zeynep views-home-PartialView.cshtml -->
+
+@using EcommerceProject2.Models;
+@model IEnumerable<Products>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        section#product-gallery {
+            text-align: center;
+        }
+
+        .product {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+
+            .product img {
+                width: 200px;
+                height: 200px;
+            }
+
+        .product {
+            border: 1px solid #E8E3E4;
+        }
+    </style>
+</head>
+<div>
+
+</div>
+                </div>
+
+        </div>
+    </section>
+</div>
+</html>

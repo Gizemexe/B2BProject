@@ -1,0 +1,70 @@
+
+@using B2BProject.Models;
+@model IEnumerable<Products>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "SearchProducts";
+    int productCount = Model != null ? Model.Count() : 0;
+    const int maxDescriptionLength = 300; // Set the maximum description length (adjust as needed)
+}
+
+<div class="text-center">
+    <h2>Search Results</h2>
+
+    <!-- Display the number of products found -->
+    <p>@productCount product(s) found.</p>
+
+    <!-- Search bar -->
+    <div class="search-bar" style="margin-bottom: 20px;">
+        <form method="get" action="@Url.Action("SearchProducts", "Home")">
+            <input type="text" name="query" placeholder="Search for products..." class="form-control" style="width: 300px; display: inline-block;" />
+            <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Search</button>
+        </form>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row justify-content-center">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4">
+                    <!-- Product card -->
+                    <div class="card product" style="margin-bottom: 20px; border: 1px solid #ddd; text-align: center;">
+                        <img class="card-img-top" src="../@product.image" alt="@product.Product_name" style="height: 300px; object-fit: cover; margin: auto;">
+                        <div class="card-body">
+                            <h4 class="card-title" style="font-size: 28px; margin-bottom: 15px;">
+                                <a href="/Home/Details/@product.Product_id" style="text-decoration: none; color: #333;">@product.Product_name</a>
+                            </h4>
+                            <p class="card-text" style="font-size: 20px; color: #777;">
+                                @{
+                                    var description = product.Product_Desc;
+                                    var shortDescription = description.Length > maxDescriptionLength ? description.Substring(0, maxDescriptionLength) + "..." : description;
+                                }
+                                <span class="short-description">@shortDescription</span>
+                                @if (description.Length > maxDescriptionLength)
+                                {
+                                    <span class="full-description" style="display:none;">@description</span>
+                                    <a href="javascript:void(0);" class="read-more" onclick="toggleDescription(this)"> Continue to read</a>
+                                }
+                            </p>
+                        </div>
+                        <div class="card-footer" style="font-size: 24px; background-color: #f8f9fa;">
+                            Fiyat: $@product.price
+                        </div>
+                        <div class="card-footer" style="background-color: #f8f9fa;">
+                            <form method="post" action="@Url.Action("AddToOrderCart", "Cart", new { productId = product.Product_id, price = product.price, amount = 1 })">
+                                <input type="hidden" name="size" value="small" />
+                                <button type="submit" class="fa fa-shopping-cart btn btn-success" style="font-size: 24px;"> Add To Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <!-- If no search results found, display a message -->
+        <p>Sorry, the product you are looking for is not available on our site.</p>
+    }
+</div>

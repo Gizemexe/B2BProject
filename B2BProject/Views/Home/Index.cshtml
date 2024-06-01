@@ -1,33 +1,190 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@using B2BProject.Models;
+@model IEnumerable<Products>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
+<html>
+<head>
+    <style>
 
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
+        * {
+            box-sizing: border-box;
+        }
+
+
+        .container {
+            position: relative;
+        }
+
+
+        .mySlides {
+            display: none;
+        }
+
+
+        .cursor {
+            cursor: pointer;
+        }
+
+
+        .caption-container {
+            text-align: center;
+            background-color: #222;
+            padding: 2px 16px;
+            color: white;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+
+        .column {
+            float: left;
+            width: 16.66%;
+        }
+
+
+        .demo {
+            opacity: 0.6;
+        }
+
+            .active,
+            .demo:hover {
+                opacity: 1;
+            }
+
+        .sidebar {
+            text-decoration: none;
+            display: flex;
+            flex-wrap: nowrap;
+            line-height: 75px;
+            font-size: 30px;
+        }
+
+            .sidebar ul {
+                list-style-type: none;
+                margin: 0;
+            }
+
+            .sidebar li {
+                margin-bottom: 0px;
+                padding-left: 40px;
+                display: inline-block;
+            }
+
+            .sidebar a {
+                text-decoration: none;
+                color: #333;
+                text-transform: capitalize;
+                display: block;
+                padding-left: 10px;
+                padding-right: 10px;
+                align-items: center;
+                font-size: 25px;
+            }
+
+                .sidebar a img {
+                    margin-right: 10px;
+                }
+
+                .sidebar a:hover {
+                    text-decoration: none;
+                    background-color: lightpink;
+                }
+    </style>
+</head>
+<body>
+    <br />
+    @*Advertisement and Category bar*@
+    <div class="body">
+
+        <div class="search-container">
+            <form action="@Url.Action("SearchProducts", "Home")" method="get">
+                <input type="text" placeholder="Search.." name="search">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
+        <br />
+        <div class="sidebar">
+            <ul>
+                @{
+                    var id = 1;
+                    <li> <a href="@Url.Action("Categories", "Home", new { id })"><img src="~/Content/Images/Cosmetic.png" width="25" height="25">Cosmetic</a></li>
+                    id++;
+                    <li> <a href="@Url.Action("Categories", "Home", new { id  })"><img src="~/Content/Images/Cleaning.png" width="25" height="25">Cleaning</a></li>
+                    id++;
+                    <li> <a href="@Url.Action("Categories", "Home", new { id  })"><img src="~/Content/Images/Stationery.png" width="25" height="25">Stationary</a></li>
+                    id++;
+                    <li> <a href="@Url.Action("Categories", "Home", new { id  })"><img src="~/Content/Images/Food.png" width="25" height="25">Food</a></li>
+                    id++;
+                    <li><a href="@Url.Action("Categories", "Home", new { id })"><img src="~/Content/Images/Fabric.png" width="25" height="25">Fabric</a></li>
+                }
+            </ul>
+        </div>
+        <br />
+        <div class="header">
+
+            <div class="container">
+
+                <!-- Full-width images with number text -->
+                <div class="mySlides">
+
+                    <img src="~/Content/Images/Add.png" style="width:100%">
+                </div>
+
+                <div class="mySlides">
+
+                    <img src="~/Content/Images/Addd.png" style="width:100%">
+                </div>
+
+                <div class="mySlides">
+
+                    <img src="~/Content/Images/Adddd.png" style="width:100%">
+                </div>
+
+                <div class="mySlides">
+
+                    <img src="~/Content/Images/Addddd.png" style="width:100%">
+                </div>
+
+            </div>
+
+
+        </div>
     </div>
-</main>
+    <br /><br />
+    <div class="row">
+
+        <div style="align-self:center">
+
+            <img src="~/Content/Images/Starsweek.png" style="width:90%">
+        </div>
+
+        @Html.Partial("PartialView", TempData["products"])
+
+    </div>
+
+
+    <script>
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(showSlides, 2000); // Change image every 2 seconds
+        }
+    </script>
+
+</body>
+</html>

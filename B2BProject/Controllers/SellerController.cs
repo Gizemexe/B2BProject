@@ -1,12 +1,5 @@
-<<<<<<< HEAD
-﻿using B2BProject.Models;
-=======
 using B2BProject.Models;
->>>>>>> f86ced1f07240feb457de30763d1968e29fb9844
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -39,8 +32,9 @@ namespace B2BProject.Controllers
                 if (bu != null)
                 {
                     FormsAuthentication.SetAuthCookie(seller.Email, false);
-                    Session["Role_id"] = bu.Rol_id.ToString();
+                    Session["UserId"] = bu.User_id.ToString();
                     Session["Email"] = bu.Email.ToString();
+                    Session["RoleId"] = bu.Rol_id.ToString();
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -56,42 +50,40 @@ namespace B2BProject.Controllers
         {
             return View();
         }
+
+        [HttpPost]
         public ActionResult Register(Users seller)
         {
-            var entities = new B2BDbEntities();
-
             if (ModelState.IsValid)
             {
-
-                var Seller = new Users
+                using (var entities = new B2BDbEntities())
                 {
-                    Name = seller.Name,
-                    Surname = seller.Surname,
-                    Email = seller.Email,
-                    Company_name = seller.Company_name,
-                    Phone = seller.Phone,
-                    Password = seller.Password,
-                    Rol_id = 2
+                    var newSeller = new Users
+                    {
+                        Name = seller.Name,
+                        Surname = seller.Surname,
+                        Email = seller.Email,
+                        Company_name = seller.Company_name,
+                        Phone = seller.Phone,
+                        Password = seller.Password,
+                        Rol_id = 2
+                    };
 
-                };
+                    entities.Users.Add(newSeller);
+                    entities.SaveChanges();
 
-                entities.Users.Add(Seller);
-                entities.SaveChanges();
-
-                return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Login");
+                }
             }
             return View(seller);
         }
+
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
             Session.Clear(); // Oturum verilerini temizle
             Session.Abandon(); // Oturumu sonlandır
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home");
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> f86ced1f07240feb457de30763d1968e29fb9844

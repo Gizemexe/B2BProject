@@ -1,13 +1,5 @@
-<<<<<<< HEAD
-﻿using B2BProject.Models;
-=======
 using B2BProject.Models;
->>>>>>> f86ced1f07240feb457de30763d1968e29fb9844
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
@@ -21,6 +13,7 @@ namespace B2BProject.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Login(Users buyer)
         {
@@ -39,8 +32,9 @@ namespace B2BProject.Controllers
                 if (bu != null)
                 {
                     FormsAuthentication.SetAuthCookie(buyer.Email, false);
-                    Session["Role_id"] = bu.Rol_id.ToString();
+                    Session["UserId"] = bu.User_id.ToString();
                     Session["Email"] = bu.Email.ToString();
+                    Session["RoleId"] = bu.Rol_id.ToString();
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -50,6 +44,7 @@ namespace B2BProject.Controllers
             }
             return View();
         }
+
         [HttpGet]
         public ActionResult Register()
         {
@@ -59,39 +54,36 @@ namespace B2BProject.Controllers
         [HttpPost]
         public ActionResult Register(Users buyer)
         {
-            var entities = new B2BDbEntities();
-
             if (ModelState.IsValid)
             {
-                var Buyer = new Users
+                using (var entities = new B2BDbEntities())
                 {
-                    Name = buyer.Name,
-                    Surname = buyer.Surname,
-                    Email = buyer.Email,
-                    Company_name = buyer.Company_name,
-                    Phone = buyer.Phone,
-                    Password = buyer.Password,
-                    Rol_id = 3
+                    var newBuyer = new Users
+                    {
+                        Name = buyer.Name,
+                        Surname = buyer.Surname,
+                        Email = buyer.Email,
+                        Company_name = buyer.Company_name,
+                        Phone = buyer.Phone,
+                        Password = buyer.Password,
+                        Rol_id = 3
+                    };
 
-                };
+                    entities.Users.Add(newBuyer);
+                    entities.SaveChanges();
 
-                entities.Users.Add(Buyer);
-                entities.SaveChanges();
-
-                return RedirectToAction("Login", "Buyer");
+                    return RedirectToAction("Login");
+                }
             }
             return View(buyer);
         }
+
         public ActionResult LogOut()
         {
             FormsAuthentication.SignOut();
             Session.Clear(); // Oturum verilerini temizle
             Session.Abandon(); // Oturumu sonlandır
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home");
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> f86ced1f07240feb457de30763d1968e29fb9844

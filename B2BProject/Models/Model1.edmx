@@ -88,7 +88,6 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Rol_id" Type="int" Nullable="false" />
           <Property Name="Rol_name" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
@@ -597,7 +596,6 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Rol_id" Type="Int32" Nullable="false" />
           <Property Name="Rol_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Users" Relationship="B2BDbModel.FK_Users_Rol_id" FromRole="Roles" ToRole="Users" />
         </EntityType>
@@ -746,7 +744,6 @@
             <EntityTypeMapping TypeName="B2BDbModel.Roles">
               <MappingFragment StoreEntitySet="Roles">
                 <ScalarProperty Name="Rol_name" ColumnName="Rol_name" />
-                <ScalarProperty Name="Rol_id" ColumnName="Rol_id" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

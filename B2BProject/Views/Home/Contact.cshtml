@@ -1,19 +1,30 @@
-﻿@{
+﻿@model B2BProject.Models.Users
+@{
     ViewBag.Title = "Contact";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
+<div>
+    <br />
+    <img src="~/Content/Images/profile.png" style="margin-left:0px" width="100" height="100" />
 
-    <address>
-        One Microsoft Way<br />
-        Redmond, WA 98052-6399<br />
-        <abbr title="Phone">P:</abbr>
-        425.555.0100
-    </address>
+    <h2><b>Customer Informations</b></h2>
+    <h3><b>Email-Username: </b> @Model.Email</h3>
+</div>
+<div>
+    <address style="font-size: 25px">
+        <b>Name-Surname :</b> @Model.Name - @Model.Surname<br />
+        <b> Company Name:</b> @Model.Company_name<br />
+        <b> Role:</b> @Model.Roles.Rol_name<br />
+        <p title="Phone"><b>Phone Number:</b> @Model.Phone</p>
 
-    <address>
-        <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-        <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
     </address>
-</main>
+</div>
+<br />
+<br />
+<div>
+    @Html.ActionLink("Update Profile", "UpdateProfile", "Admin", new { id = Model.User_id }, new { @class = "btn btn-primary" })
+</div>
+<br />
+<address>
+    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
+
+</address>

@@ -1,42 +1,99 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - ASP.NET Uygulamam</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <title>TanTop Official Online Store</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Uygulama adı", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Gezintiyi aç/kapat" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Buyer Login", "Login", "Buyer", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Seller Login", "Login", "Seller", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Register", "Register", "Buyer", new { area = "" }, new { @class = "nav-link" })</li>
-                </ul>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                @Html.ActionLink("TanTop", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-        </div>
+            <ul class="nav navbar-nav">
+
+                @{
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        var roleId = Convert.ToInt32(Session["RoleId"]);
+                        if (roleId == 1) // Admin
+                        {
+                            <li>@Html.ActionLink("Orders", "Index", "Orders", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Stocks", "Inventory", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Categories", "Index", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                                    <li>@Html.ActionLink("Add Categories", "Category", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                                    <li>@Html.ActionLink("Customer Informations", "ViewUsers", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                                </ul>
+                            </li>
+                        }
+                        else if (roleId == 2) // Seller
+                        {
+                            <li>@Html.ActionLink("Orders", "MyOrders", "Orders", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Coupons", "Coupons", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Products<span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Products", "MyOrders", "Orders", new { area = "" }, new { @class = "nav-link" })</li>
+                                    <li>@Html.ActionLink("Add Products", "MyOrders", "Orders", new { area = "" }, new { @class = "nav-link" })</li>
+                                </ul>
+                            </li>
+                        }
+                        else if (roleId == 3) // Buyer
+                        {
+                            <li>
+                                <a class="navbar-link px-lg-4" href="~/Cart/GetOrderCartItems"><img src="~/Content/Images/cart.png" width="30" height="30" /> &nbsp; @{ Html.RenderAction("TotalCount", "Cart");}</a>
+                            </li>
+                            <li>@Html.ActionLink("My Orders", "MyOrders", "Orders", new { area = "" }, new { @class = "nav-link" })</li>
+                        }
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link active" })</li>
+                        <li>@Html.ActionLink("Admin Login", "Login", "Admin", new { area = "" }, new { @class = "nav-link active" })</li>
+                        <li>@Html.ActionLink("Seller Login", "Login", "Seller", new { area = "" }, new { @class = "nav-link active" })</li>
+                        <li>@Html.ActionLink("Customer Login", "Login", "Buyer", new { area = "" }, new { @class = "nav-link active" })</li>
+                    }
+                }
+            </ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    string email = Session["Email"] as string;
+                                    int? userId = Convert.ToInt32(Session["UserId"]);
+                                    if (!string.IsNullOrEmpty(email) && userId.HasValue)
+                                    {
+                                        <li>@Html.ActionLink(email, "Contact", "Home", new { id = userId.Value }, new { @class = "nav-link" })</li>
+                                    }
+                                    <li>@Html.ActionLink("Log Out", "LogOut", User.IsInRole("Admin") ? "Admin" : "Seller", new { area = "" }, new { @class = "nav-link" })</li>
+                                }
+                                else
+                                {
+                                    <li>@Html.ActionLink("Customer Sign Up", "Register", "Buyer", new { area = "" }, new { @class = "nav-link" })</li>
+                                    <li>@Html.ActionLink("Seller Sign Up", "Register", "Seller", new { area = "" }, new { @class = "nav-link" })</li>
+                                }
+                            </ul>
+</div>
     </nav>
-    <div class="container body-content">
+
+    <div class="container">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - ASP.NET Uygulamam</p>
+            <p>&copy; @DateTime.Now.Year - TanTop Group Consulting Communication and Sales Trade.A.Sh.- All Rights Reserved.</p>
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
 </body>
 </html>

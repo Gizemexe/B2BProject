@@ -21,7 +21,6 @@ namespace B2BProject.Models
         }
     
         public int id { get; set; }
-        public int Rol_id { get; set; }
         public string Rol_name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

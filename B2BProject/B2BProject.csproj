@@ -130,6 +130,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BuyerController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SellerController.cs" />
     <Compile Include="Global.asax.cs">
@@ -250,11 +251,15 @@
     <Content Include="Views\Buyer\Register.cshtml" />
     <Content Include="Views\Seller\Register.cshtml" />
     <Content Include="Views\Admin\Login.cshtml" />
-    <Content Include="Views\Shared\Admin_Layout.cshtml" />
-    <Content Include="Views\Shared\Buyer_Layout.cshtml" />
-    <Content Include="Views\Shared\Seller_Layout.cshtml" />
     <Content Include="Views\Buyer\Login.cshtml" />
     <Content Include="Views\Seller\Login.cshtml" />
+    <Content Include="Views\Home\PartialView.cshtml" />
+    <Content Include="Views\Home\Categories.cshtml" />
+    <Content Include="Views\Admin\ViewUsers.cshtml" />
+    <Content Include="Views\Admin\UpdateProfile.cshtml" />
+    <Content Include="Views\Home\SearchProducts.cshtml" />
+    <Content Include="Views\Cart\TotalCount.cshtml" />
+    <Content Include="Views\Home\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

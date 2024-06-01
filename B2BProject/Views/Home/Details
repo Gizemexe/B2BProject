@@ -1,0 +1,158 @@
+@using B2BProject.Models;
+@model IEnumerable<Products>
+@{
+    ViewBag.Title = "Details";
+    //Adet fiyatı - TanTop ürünlerinin normal fiyatı
+    // KOLİDE 12 ADET ÜRÜN VAR
+    // Koli fiyatı - TanTop ürünlerinin normal fiyatın 12 katı olarak varsayalım ve %10 indirim uygulayalım
+    var koliFiyati = Model.price * 12;
+    var indirimliKoliFiyati = koliFiyati * 0.9;
+}
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-rREpPtu8d1ZiCYSFJ1Bn7I1SaMmST/EM8mH9DjIu2exB6lDaxj1e0R3eY1nO2dca" crossorigin="anonymous">
+    <style>
+        .image {
+            border: 1px solid #E8E3E4;
+            display: inline-block;
+        }
+
+        .review {
+            border-style: solid;
+            border-width: 2px;
+        }
+
+        .rating {
+            margin-top: 10px;
+        }
+
+        .price-options {
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .price-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .price-table th, .price-table td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+
+            .price-table th {
+                background-color: #f2f2f2;
+            }
+
+        .price-option-input {
+            margin-right: 5px;
+        }
+
+        .strikethrough {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-6">
+            <br />
+            <img src="~/@Model.image" class="img-fluid rounded" height="400">
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>@Model.Product_name</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <span class="badge badge-primary" style="font-size:15px">In Stock</span>
+                    <span class="product-number">#2365656</span>
+                    <br />
+                    <br />
+
+                    @if (!string.IsNullOrEmpty(ViewBag.StockMessage))
+                    {
+                        <div class="alert alert-warning mt-2" role="alert">
+                            @ViewBag.StockMessage
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(ViewBag.WarningMessage))
+                    {
+                        <div class="alert alert-warning mt-2" role="alert">
+                            @ViewBag.WarningMessage
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <div id="description" style="font-size:23px">
+                        @Model.Product_Desc
+                    </div>
+                </div>
+            </div>
+            <div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12 price-options">
+                    <h3>SEÇENEKLER</h3>
+                    <table class="price-table">
+                        <tr>
+                            <th>Seçenek</th>
+                            <th>Fiyat</th>
+                            <th>TanTop'a Özel İndirimli Fiyat</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="radio" name="priceOption" value="@Model.price" class="price-option-input" checked>
+                                Adet
+                            </td>
+                            <td>@Model.price $</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input type="radio" name="priceOption" value="@indirimliKoliFiyati" class="price-option-input">
+                                Koli
+                            </td>
+                            <td><span class="strikethrough">@koliFiyati $</span></td>
+                            <td>@indirimliKoliFiyati $</td>
+                        </tr>
+                    </table>
+                    <div style="font-size:25px; margin-top: 10px;">
+                        <span id="selected-price">@Model.price $</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-md-12">
+                    <br />
+                    <form method="post" action="@Url.Action("AddToOrderCart", "Cart")">
+                        <input type="hidden" name="customerId" value="@Convert.ToInt32(Session["Customer_id"].ToString())">
+                        <input type="hidden" name="productId" value="@Model.Product_id">
+                        <input type="hidden" name="price" id="hiddenPrice" value="@Model.price">
+                        <input type="hidden" name="amount" value="1">
+                        <input type="hidden" name="size" id="hiddenSize" value="">
+                        <button type="submit" class="btn btn-danger">Add To Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('input[name="priceOption"]').change(function () {
+                var selectedPrice = $('input[name="priceOption"]:checked').val();
+                $('#selected-price').text(selectedPrice + " $");
+                $('#hiddenPrice').val(selectedPrice);
+            });
+        });
+    </script>
+</body>
+</html>

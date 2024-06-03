@@ -1,0 +1,87 @@
+﻿@using B2BProject.Models
+@model IEnumerable<Coupons>
+@{
+    ViewBag.Title = "Coupons";
+}
+
+
+<html>
+
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+
+<body>
+    <br />
+    <br />
+    <br />
+    <h1 style="text-align:center">Coupons List</h1>
+
+    <table>
+        <tr>
+            <th>CouponID</th>
+            <th>Coupon Code</th>
+            <th>Discount Amount</th>
+            <th>Is Active</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Seller Name</th>
+            <th>Actions</th>
+
+
+
+
+        </tr>
+        @foreach (var item in (IEnumerable<Coupons>)TempData["Coupon"])
+        {
+            <tr>
+                <td>@item.Coupon_id</td>
+                <td>@item.Coupon_Code</td>
+
+                <td>@item.Discount</td>
+                <td>@item.IsActive</td>
+                <td>@item.Start_date</td>
+                <td>@item.End_date</td>
+                <td>@item.Users.Name</td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <a href="@Url.Action("DeactivateCoupon", "Seller", new { couponId = item.Coupon_id })">Deactivate</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("ActivateCoupon", "Seller", new { couponId = item.Coupon_id })">Activate</a>
+                    }
+                </td>
+
+            </tr>
+        }
+
+
+    </table>
+    <br />
+    <a href="@Url.Action("AddCoupons", "Seller")" class="btn btn-primary"> Add Coupons</a>
+
+</body>
+</html>
+
+
+
+

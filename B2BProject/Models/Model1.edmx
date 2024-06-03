@@ -15,6 +15,7 @@
           <Property Name="Quantity" Type="int" />
           <Property Name="Price" Type="decimal" Precision="18" Scale="0" />
           <Property Name="Total" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Options" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Categories">
           <Key>
@@ -322,6 +323,7 @@
           <Property Name="Total" Type="Decimal" Precision="18" Scale="0" />
           <NavigationProperty Name="Products" Relationship="B2BDbModel.FK_Cart_products" FromRole="Cart" ToRole="Products" />
           <NavigationProperty Name="Users" Relationship="B2BDbModel.FK_Cart_User" FromRole="Cart" ToRole="Users" />
+          <Property Name="Options" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Categories">
           <Key>
@@ -644,6 +646,7 @@
           <EntitySetMapping Name="Cart">
             <EntityTypeMapping TypeName="B2BDbModel.Cart">
               <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="Options" ColumnName="Options" />
                 <ScalarProperty Name="Cart_id" ColumnName="Cart_id" />
                 <ScalarProperty Name="User_id" ColumnName="User_id" />
                 <ScalarProperty Name="Product_id" ColumnName="Product_id" />

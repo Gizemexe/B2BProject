@@ -1,0 +1,125 @@
+﻿@using B2BProject.Models;
+@model IEnumerable<Products>
+@{
+    int productCount = Model != null ? Model.Count() : 0;
+    const int maxDescriptionLength = 50; // Set the maximum description length (adjust as needed)
+    var random = new Random();
+    var randomProducts = Model.OrderBy(x => random.Next()).Take(6);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        section#product-gallery {
+            text-align: center;
+            padding: 30px 0; /* Boşluklar */
+        }
+
+        .product-card {
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Gölgeli kutu efekti */
+            background-color: #fff;
+            margin: 20px;
+            padding: 20px;
+        }
+
+            .product-card img {
+                width: 200px; /* Sabit genişlik */
+                height: 200px; /* Sabit yükseklik */
+                object-fit: cover; /* Resmi orantılı şekilde sığdırmak için */
+                border-radius: 10px;
+                margin-bottom: 20px;
+            }
+
+            .product-card h4 {
+                font-size: 24px;
+                margin-bottom: 10px;
+                color: #333; /* Başlık rengi */
+            }
+
+            .product-card .description {
+                font-size: 16px;
+                color: #666; /* Açıklama rengi */
+            }
+
+            .product-card .price {
+                font-size: 20px;
+                color: #e1652e; /* Fiyat rengi */
+                margin-top: 15px;
+            }
+
+            .product-card .add-to-cart {
+                background-color: #e1652e;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 20px;
+                font-size: 18px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+                .product-card .add-to-cart:hover {
+                    background-color: #efaf82;
+                }
+
+        .read-more {
+            color: #007bff; /* Mavi renk */
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <section id="product-gallery">
+            <h2 style="font-size: 32px; margin-bottom: 30px;">Trendy Products</h2>
+            <div class="row">
+                @foreach (var product in randomProducts)
+                {
+                    <div class="col-md-4">
+                        <div class="product-card">
+                            <img src="../@product.Image" alt="@product.Product_name">
+                            <h4><a href="/Home/Details/@product.Product_id" style="text-decoration: none; color: #333;">@product.Product_name</a></h4>
+                            <p class="description">
+                                @{
+                                    var description = product.Description;
+                                    var shortDescription = description.Length > maxDescriptionLength ? description.Substring(0, maxDescriptionLength) + "..." : description;
+                                }
+                                @shortDescription
+                                @if (description.Length > maxDescriptionLength)
+                                {
+                                    <span class="full-description" style="display:none;">@description</span>
+                                    <a href="javascript:void(0);" class="read-more" onclick="toggleDescription(this)"> ...</a>
+                                }
+                            </p>
+                            <p class="price">Fiyat: @product.Price₺</p>
+                            <form method="post" action="@Url.Action("AddToOrderCart", "Cart", new { productId = product.Product_id, price = product.Price, amount = 1, option = "Adet"})">
+                                <input type="hidden" name="size" value="small" />
+                                <button type="submit" class="add-to-cart"> <i class="fa fa-shopping-cart"></i> Add To Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function toggleDescription(element) {
+            var descriptionElement = element.previousElementSibling;
+            var fullDescriptionElement = descriptionElement.nextElementSibling;
+
+            if (descriptionElement.style.display === "none") {
+                descriptionElement.style.display = "inline";
+                fullDescriptionElement.style.display = "none";
+                element.innerHTML = " Continue to read";
+            } else {
+                descriptionElement.style.display = "none";
+                fullDescriptionElement.style.display = "inline";
+                element.innerHTML = " Close";
+            }
+        }
+    </script>
+</body>
+</html>

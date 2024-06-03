@@ -95,9 +95,28 @@
                     text-decoration: none;
                     background-color: lightpink;
                 }
+        .image-container {
+            display: flex;
+            justify-content: center; /* Yatay ortala */
+            align-items: center; /* Dikey ortala */
+            margin-top: 20px; /* İstenirse üst boşluk */
+        }
+
+        .image-wrapper {
+            width: 90%; /* Resim genişliği */
+           
+        }
+
+            .image-wrapper img {
+                width: 100%; /* Resim genişliğini %100 olarak ayarla */
+                height: auto; /* Otomatik yükseklik ayarı */
+            }
     </style>
 </head>
 <body>
+    <br />
+    <br />
+    <br />
     <br />
     @*Advertisement and Category bar*@
     <div class="body">
@@ -157,16 +176,26 @@
         </div>
     </div>
     <br /><br />
-    <div class="row">
+          <div class="row">
 
-        <div style="align-self:center">
 
-            <img src="~/Content/Images/Starsweek.png" style="width:90%">
-        </div>
 
-        @Html.Partial("PartialView", TempData["products"])
+              @Html.Partial("PartialView", TempData["products"])
 
-    </div>
+              <div class="image-container">
+                  <div class="image-wrapper">
+                      <img src="~/Content/Images/Sale.png" style="width:90%">
+                  </div>
+              </div>
+
+              @Html.Partial("GetRandomproducts", TempData["products"])
+
+              <div class="image-container">
+                  <div class="image-wrapper">
+                      <img src="~/Content/Images/Starsweek.png" style="width:90%">
+                  </div>
+              </div>
+          </div>
 
 
     <script>

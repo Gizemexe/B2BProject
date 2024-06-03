@@ -1,20 +1,24 @@
-﻿using projeb2b.Models;
+﻿using B2BProject.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
-namespace EcommerceProject2.Controllers
+namespace B2BProject.Controllers
 {
     public class OrdersController : Controller
     {
         // GET: Orders
         public ActionResult Index()
         {
+            var userId = GetUserId();
             using (var entities = new B2BDbEntities())
             {
                 var orders = entities.Orders
-                                     .Include("OrderDetails.Product")
-                                     .Include("User")
+                                     .Include("OrderDetails.Products")
+                                     .Include("Users")
+                                     .Where(o => o.OrderDetails.Any(od => od.Products.User_id == userId)) // Sadece bu satıcıya ait ürünlerden siparişleri filtrele
                                      .ToList();
 
                 TempData["orders"] = orders;
@@ -23,13 +27,13 @@ namespace EcommerceProject2.Controllers
         }
 
         [HttpPost]
-        public ActionResult BuyNow()
+        public ActionResult BuyNow(string address, decimal? grandTotal)
         {
             int userId = GetUserId();
 
             using (var entities = new B2BDbEntities())
             {
-                var cartItems = entities.Carts
+                var cartItems = entities.Cart
                                         .Where(c => c.User_id == userId)
                                         .ToList();
 
@@ -39,12 +43,12 @@ namespace EcommerceProject2.Controllers
                     return RedirectToAction("Index", "Cart");
                 }
 
-                var order = new Order
+                var order = new Orders
                 {
                     User_id = userId,
                     Date = DateTime.Now,
-                    Total = cartItems.Sum(c => c.Total),
-                    Address = "User's address here", // Kullanıcının adresi burada belirtilmeli
+                    Total = grandTotal,
+                    Address = address,
                     Order_status = "Pending",
                     Payment_status = "Unpaid"
                 };
@@ -52,27 +56,30 @@ namespace EcommerceProject2.Controllers
                 entities.Orders.Add(order);
                 entities.SaveChanges();
 
+                int orderId = order.Order_id;
+
                 foreach (var item in cartItems)
                 {
-                    var orderDetail = new OrderDetail
-                    {
-                        Order_id = order.Order_id,
-                        Product_id = item.Product_id,
-                        Quantity = item.Quantity,
-                        UnitPrice = item.Price,
-                        Total = item.Total
-                    };
-
-                    entities.OrderDetails.Add(orderDetail);
-
                     var product = entities.Products.SingleOrDefault(p => p.Product_id == item.Product_id);
                     if (product != null)
                     {
+                        var orderDetail = new OrderDetails
+                        {
+                            Order_id = orderId,
+                            Product_id = item.Product_id,
+                            Quantity = item.Quantity,
+                            UnitPrice = product.Price,
+                            Total = item.Total // Her öğenin kendi toplam tutarı olmalıdır
+                        };
+
+                        entities.OrderDetails.Add(orderDetail);
+
+                        // Sepetten öğeyi kaldır
+                        entities.Cart.Remove(item);
+
+                        // Ürün stoğunu azalt
                         product.Stock -= item.Quantity;
                     }
-
-                    // Sepetten öğeyi tek tek sil
-                    entities.Carts.Remove(item);
                 }
 
                 entities.SaveChanges();
@@ -100,10 +107,26 @@ namespace EcommerceProject2.Controllers
                 return View(orders);
             }
         }
+        public ActionResult OrderDetails(int orderId)
+        {
+            using (var entities = new B2BDbEntities())
+            {
+                var order = entities.OrderDetails
+                                    .Include("Products")
+                                    .Where(o => o.Order_id == orderId)
+                                    .ToList();
 
+                if (order == null)
+                {
+                    return HttpNotFound();
+                }
+
+                return View(order);
+            }
+        }
         private int GetUserId()
         {
-            if (Session["User_id"] != null && int.TryParse(Session["User_id"].ToString(), out int userId))
+            if (Session["UserId"] != null && int.TryParse(Session["UserId"].ToString(), out int userId))
             {
                 return userId;
             }

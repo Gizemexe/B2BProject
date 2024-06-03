@@ -90,6 +90,7 @@
                 border-color: #FFA500;
                 background-color: #FF8C00; /* Seçili kutunun arka plan rengi */
             }
+
         .btn.btn-danger {
             background-color: #FFA500; /* Turuncu renk */
             border-color: #FFA500; /* Turuncu rengin kenarlık rengi */
@@ -103,136 +104,105 @@
     </style>
 </head>
 <body>
+    <br />
+    <br />
+    <br />
     <div class="row">
         <div class="col-md-6">
-            <br />
             <img src="~/@Model.Image" class="img-fluid rounded" height="400">
         </div>
         <div class="col-md-6">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>@Model.Product_name</h1>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <span class="badge badge-primary" style="font-size:15px">In Stock</span>
-                    <span class="product-number">#2365656</span>
-                    <br />
-                    <br />
+            <h1>@Model.Product_name</h1>
+            <span class="badge badge-primary" style="font-size:15px">In Stock</span>
+            <span class="product-number">#2365656</span>
 
-                    @if (!string.IsNullOrEmpty(ViewBag.StockMessage))
-                    {
-                        <div class="alert alert-warning mt-2" role="alert">
-                            @ViewBag.StockMessage
-                        </div>
-                    }
-                    @if (!string.IsNullOrEmpty(ViewBag.WarningMessage))
-                    {
-                        <div class="alert alert-warning mt-2" role="alert">
-                            @ViewBag.WarningMessage
-                        </div>
-                    }
+            <div id="description" style="font-size:23px">@Model.Description</div>
+
+            <div class="price-options">
+                <h3 style="text-align:center">SEÇENEKLER</h3>
+                <div class="attributes">
+                    <dl>
+                        <dt id="product_attribute_label_26914">
+                            <label class="text-prompt">Seçenekler</label>
+                            <span class="required">*</span>
+                        </dt>
+                        <dd id="product_attribute_input_26914">
+                            <ul data-attr="26914" class="option-list option-attribute justify-content-center justify-content-xl-start">
+                                <li data-attr-value="102517" class="radio-box" id="li-26914_102517">
+                                    <div class="radio-box-inner selected">
+                                        <input class="option-input radio" id="product_attribute_26914_102517" type="radio" name="product_attribute_26914" value="Adet" data-price="@Model.Price" checked="checked">
+                                        <label for="product_attribute_26914_102517" class="label_radio">
+                                            <span class="attr-name">Adet</span><br />
+                                            <span class="attr-pcs">
+                                                <span class="attr-pcs-num">1</span>
+                                                <span>Adet</span>
+                                            </span>
+                                            <span class="attr-price">@Model.Price₺</span><br />
+                                            <span class="d-flex mt-auto mb-0 small justify-content-center">
+                                                <span class="attr-pcs-price text-nowrap me-1">@Model.Price₺</span>
+                                                <span class="attr-pcs-text text-nowrap">/ Adet</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li data-attr-value="102518" class="radio-box" id="li-26914_102518">
+                                    <div class="radio-box-inner">
+                                        <input class="option-input radio" id="product_attribute_26914_102518" type="radio" name="product_attribute_26914" value="Koli" data-price="@indirimliKoliFiyati">
+                                        <label for="product_attribute_26914_102518" class="label_radio">
+                                            <span class="attr-name">Koli</span><br />
+                                            <span class="attr-pcs">
+                                                <span class="attr-pcs-num">12</span>
+                                                <span>Adet</span>
+                                            </span>
+                                            <span class="attr-price">@koliFiyati₺</span>
+                                            <span class="d-flex mt-auto mb-0 small justify-content-center">
+                                                <br />
+                                                <span class="attr-pcs-price text-nowrap me-1">@indirimliKoliFiyati₺</span>
+                                                <span class="attr-pcs-text text-nowrap">/ Koli</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </div>
+                <div style="font-size:25px; margin-top: 10px;">
+                    <span id="selected-price">@Model.Price TL</span><br />
+                    <label class="text-prompt">Fiyatlara KDV dahildir</label>
+                    <span class="required">!</span>
                 </div>
             </div>
-            <div class="row mt-2">
-                <div class="col-md-12">
-                    <div id="description" style="font-size:23px">
-                        @Model.Description
-                    </div>
-                </div>
-            </div>
-            <div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-md-12 price-options">
-                    <h3 style="text-align:center">SEÇENEKLER</h3>
-                    <div class="attributes" style="">
-                        <dl>
-                            <dt id="product_attribute_label_26914">
-                                <label class="text-prompt">Seçenekler</label>
-                                <span class="required">*</span>
-                            </dt>
-                            <dd id="product_attribute_input_26914">
-                                <ul data-attr="26914" class="option-list option-attribute justify-content-center justify-content-xl-start">
-                                    <li data-attr-value="102517" class="radio-box" id="li-26914_102517">
-                                        <div class="radio-box-inner selected">
-                                            <input class="option-input radio" id="product_attribute_26914_102517" type="radio" name="product_attribute_26914" value="@Model.Price" checked="checked">
-                                            <label for="product_attribute_26914_102517" class="label_radio">
-                                                <span class="attr-name">Adet</span><br />
-                                                <span class="attr-pcs">
-                                                    <span class="attr-pcs-num">1</span>
-                                                    <span>Adet</span>
-                                                </span>
-                                                <span class="attr-price">@Model.Price TL</span><br />
-                                                <span class="d-flex mt-auto mb-0 small justify-content-center">
-                                                    <span class="attr-pcs-price text-nowrap me-1">@Model.Price TL</span>
-                                                    <span class="attr-pcs-text text-nowrap">/ Adet</span>
-                                                </span>
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li data-attr-value="102518" class="radio-box" id="li-26914_102518">
-                                        <div class="radio-box-inner">
-                                            <input class="option-input radio" id="product_attribute_26914_102518" type="radio" name="product_attribute_26914" value="@indirimliKoliFiyati">
-                                            <label for="product_attribute_26914_102518" class="label_radio">
-                                                <span class="attr-name">Koli</span><br />
-                                                <span class="attr-pcs">
-                                                    <span class="attr-pcs-num">12</span>
-                                                    <span>Adet</span>
-                                                </span>
-                                                <span class="attr-price">@koliFiyati TL</span>
-                                                <span class="d-flex mt-auto mb-0 small justify-content-center">
-                                                    <br />
-                                                    <span class="attr-pcs-price text-nowrap me-1">@indirimliKoliFiyati TL</span>
-                                                    <span class="attr-pcs-text text-nowrap">/ Koli</span>
-                                                </span>
-                                            </label>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </dd>
-                        </dl>
-                    </div>
-                    <div style="font-size:25px; margin-top: 10px;">
-                        <span id="selected-price">@Model.Price TL</span><br />
-                        <label class="text-prompt">Fiyatlara KDV dahildir</label>
-                        <span class="required">!</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-2">
-                <div class="col-md-12">
-                    <br />
-                    <form method="post" action="@Url.Action("AddToOrderCart", "Cart")">
-                        <input type="hidden" name="customerId" value="@Convert.ToInt32(Session["UserId"].ToString())">
-                        <input type="hidden" name="productId" value="@Model.Product_id">
-                        <input type="hidden" name="price" id="hiddenPrice" value="@Model.Price">
-                        <input type="hidden" name="amount" value="1">
-                        <input type="hidden" name="size" id="hiddenSize" value="">
-                        <button type="submit" class="btn btn-danger">Add To Cart</button>
-                    </form>
-                </div>
-            </div>
+
+            <form method="post" action="@Url.Action("AddToOrderCart", "Cart")">
+                <input type="hidden" name="userId" value="@Convert.ToInt32(Session["UserId"].ToString())">
+                <input type="hidden" name="productId" value="@Model.Product_id">
+                <input type="hidden" name="price" id="hiddenPrice" value="@Model.Price">
+                <input type="hidden" name="amount" value="1">
+                <input type="hidden" name="option" id="hiddenOption" value="Adet">
+                <button type="submit" class="btn btn-danger">Add To Cart</button>
+            </form>
+            @using (Html.BeginForm("SendMessage", "Messages", new { recipientId = Model.User_id }))
+            {
+                <button type="submit" class="btn btn-primary">Send Message to Seller</button>
+            }
         </div>
     </div>
     <script>
         $(document).ready(function () {
-            // Initial selected price
-            var selectedPrice = $('input[name="product_attribute_26914"]:checked').val();
-            $('#selected-price').text(selectedPrice + " TL");
+            var selectedPrice = $('input[name="product_attribute_26914"]:checked').data('price');
+            $('#selected-price').text(selectedPrice + " ₺");
             $('#hiddenPrice').val(selectedPrice);
 
             $('.radio-box-inner').click(function () {
-                // Remove "selected" class from all boxes
                 $('.radio-box-inner').removeClass('selected');
-                // Add "selected" class to the clicked box
                 $(this).addClass('selected');
 
-                // Update selected price
-                selectedPrice = $(this).find('input').val();
-                $('#selected-price').text(selectedPrice + " TL");
+                var selectedOption = $(this).find('input').val(); 
+                selectedPrice = $(this).find('input').data('price');
+                $('#selected-price').text(selectedPrice + " ₺");
                 $('#hiddenPrice').val(selectedPrice);
+                $('#hiddenOption').val(selectedOption);
             });
         });
     </script>

@@ -20,6 +20,7 @@ namespace B2BProject.Models
         public Nullable<int> Quantity { get; set; }
         public Nullable<decimal> Price { get; set; }
         public Nullable<decimal> Total { get; set; }
+        public string Options { get; set; }
     
         public virtual Products Products { get; set; }
         public virtual Users Users { get; set; }

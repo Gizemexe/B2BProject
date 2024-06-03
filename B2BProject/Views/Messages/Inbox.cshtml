@@ -1,0 +1,27 @@
+﻿@model IEnumerable<B2BProject.Models.Messaging>
+
+@{
+    ViewBag.Title = "Inbox";
+}
+
+<h2>Inbox</h2>
+
+<table class="table">
+    <tr>
+        <th>Sender</th>
+        <th>Message</th>
+        <th>Date</th>
+    </tr>
+    @foreach (var message in Model)
+    {
+        <tr>
+            <td>@message.Sender_Id</td>
+            <td>@message.Message</td>
+            <td>@message.Date</td>
+        </tr>
+    }
+</table>
+
+<div>
+    @Html.ActionLink("Send Message", "SendMessage")
+</div>

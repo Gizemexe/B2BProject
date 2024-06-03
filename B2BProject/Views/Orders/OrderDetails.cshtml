@@ -1,0 +1,47 @@
+﻿@model List<B2BProject.Models.OrderDetails>
+
+@{
+    ViewBag.Title = "Order Details";
+}
+<style>
+    .product-image {
+        width: 85px;
+        height: 85px;
+        object-fit: contain; 
+    }
+</style>
+<br />
+<br />
+<br />
+<br />
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><img class="product-image" src="../@item.Products.Image" alt="@item.Products.Product_name"></td>
+                    <td>@item.Products.Product_name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice</td>
+                    <td>@item.Total</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No order details found for this order.</p>
+}

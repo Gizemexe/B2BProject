@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 </head>
 <body>
 
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
                 @Html.ActionLink("TanTop", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
@@ -23,12 +24,11 @@
                         var roleId = Convert.ToInt32(Session["RoleId"]);
                         if (roleId == 1) // Admin
                         {
-                            <li>@Html.ActionLink("Orders", "Index", "Orders", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Stocks", "Inventory", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Orders", "Index", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li>@Html.ActionLink("Categories", "Index", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                                    <li>@Html.ActionLink("Categories", "Categories", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
                                     <li>@Html.ActionLink("Add Categories", "Category", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
                                     <li>@Html.ActionLink("Customer Informations", "ViewUsers", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
                                 </ul>
@@ -36,22 +36,27 @@
                         }
                         else if (roleId == 2) // Seller
                         {
-                            <li>@Html.ActionLink("Orders", "MyOrders", "Orders", new { area = "" }, new { @class = "nav-link" })</li>
-                            <li>@Html.ActionLink("Coupons", "Coupons", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Orders", "Index", "Orders", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Stocks", "CheckStock", "Seller", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Coupons", "Coupons", "Seller", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Messages", "SellerInbox", "Messages", new { area = "" }, new { @class = "nav-link" })</li>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Products<span class="caret"></span></a>
                                 <ul class="dropdown-menu">
-                                    <li>@Html.ActionLink("Products", "MyOrders", "Orders", new { area = "" }, new { @class = "nav-link" })</li>
-                                    <li>@Html.ActionLink("Add Products", "MyOrders", "Orders", new { area = "" }, new { @class = "nav-link" })</li>
+                                    <li>@Html.ActionLink("Products", "Index", "Seller", new { area = "" }, new { @class = "nav-link" })</li>
+                                    <li>@Html.ActionLink("Add Products", "Products", "Seller", new { area = "" }, new { @class = "nav-link" })</li>
                                 </ul>
                             </li>
                         }
                         else if (roleId == 3) // Buyer
                         {
+                            <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                             <li>
-                                <a class="navbar-link px-lg-4" href="~/Cart/GetOrderCartItems"><img src="~/Content/Images/cart.png" width="30" height="30" /> &nbsp; @{ Html.RenderAction("TotalCount", "Cart");}</a>
+                                <a class="navbar-link px-lg-4" href="~/Cart/GetOrderCartItems"><img src="~/Content/Images/cart.png" width="25" height="25" /> &nbsp; @{ Html.RenderAction("TotalCount", "Cart");}</a>
                             </li>
+
                             <li>@Html.ActionLink("My Orders", "MyOrders", "Orders", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Messages", "Inbox", "Messages", new { area = "" }, new { @class = "nav-link" })</li>
                         }
                     }
                     else

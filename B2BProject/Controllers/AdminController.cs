@@ -4,11 +4,27 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Web;
+using System.IO;
 
 namespace B2BProject.Controllers
 {
     public class AdminController : Controller
     {
+        public ActionResult Index()
+        {
+           
+            using (var entities = new B2BDbEntities())
+            {
+                var orders = entities.Orders
+                                     .Include("OrderDetails.Products")
+                                     .Include("Users")
+                                     .ToList();
+
+                TempData["orders"] = orders;
+                return View(orders);
+            }
+        }
         // GET: Admin
         [HttpGet]
         public ActionResult Login()
@@ -116,6 +132,66 @@ namespace B2BProject.Controllers
             // If ModelState is not valid or customer is not found, return to the update profile page with errors
             return View();
         }
+        public ActionResult Categories() 
+        {
+            var entities = new B2BDbEntities();
+
+            var categoryList = entities.Categories.ToList();
+
+            TempData["categories"] = categoryList;
+
+            return View();
+        }
+        public ActionResult Category()
+        {
+            if (Session["UserId"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Category(Categories cat)
+        {
+            
+                using (var entities = new B2BDbEntities())
+                {
+                Categories newCategory = new Categories
+                {
+                    Category_name = cat.Category_name,
+                };
+
+                    entities.Categories.Add(newCategory);
+                    entities.SaveChanges();
+                }
+            return RedirectToAction("Category");
+        }
+
+        [HttpGet]
+        public ActionResult DeleteCategory()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult DeleteCategory(int CategoryID)
+        {
+            using (B2BDbEntities entities = new B2BDbEntities())
+            {
+                var productsToDelete = entities.Products.Where(p => p.Category_id == CategoryID);
+                entities.Products.RemoveRange(productsToDelete);
+
+                var categoryToDelete = entities.Categories.FirstOrDefault(c => c.Category_id == CategoryID);
+                if (categoryToDelete != null)
+                {
+                    entities.Categories.Remove(categoryToDelete);
+                }
+
+                entities.SaveChanges();
+                return RedirectToAction("Category");
+            }
+        }
 
         public ActionResult LogOut()
         {
@@ -124,5 +200,6 @@ namespace B2BProject.Controllers
             Session.Abandon(); // Oturumu sonlandır
             return RedirectToAction("Index","Home");
         }
+        
     }
 }

@@ -12,7 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: black;
+    background-image: url('../Content/Images/Adminwp.png');
     background-size: cover;
     background-position: center;
     padding-top: 80px; /* Adjusted to provide space for fixed navbar */

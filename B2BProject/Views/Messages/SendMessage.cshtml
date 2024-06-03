@@ -1,0 +1,28 @@
+﻿@model B2BProject.Models.Messaging
+
+@{
+    ViewBag.Title = "Send Message";
+}
+
+<h2>Send Message</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Recipient_Id, "Recipient:")
+        @Html.TextBoxFor(model => model.Recipient_Id, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Message, "Message:")
+        @Html.TextAreaFor(model => model.Message, new { @class = "form-control", rows = 5 })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Send</button>
+}
+
+<div>
+    @Html.ActionLink("Back to Inbox", "Inbox")
+</div>

@@ -1,47 +1,150 @@
 ﻿@using B2BProject.Models;
 @model IEnumerable<Products>
-
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-
-    ViewBag.Title = "SearchProducts";
+    int productCount = Model != null ? Model.Count() : 0;
+    const int maxDescriptionLength = 50; // Set the maximum description length (adjust as needed)
 }
 
-<div>
-    <h2>Search Results</h2>
+<style>
+    section#product-gallery {
+        text-align: center;
+        padding: 30px 0; /* Boşluklar */
+    }
 
-    @if (Model != null && Model.Any())
-    {
-        foreach (var product in Model)
+    .product-card {
+        border-radius: 10px;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); /* Gölgeli kutu efekti */
+        background-color: #fff;
+        margin: 20px;
+        padding: 20px;
+    }
+
+        .product-card img {
+            width: 200px; /* Sabit genişlik */
+            height: 200px; /* Sabit yükseklik */
+            object-fit: cover; /* Resmi orantılı şekilde sığdırmak için */
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .product-card h4 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333; /* Başlık rengi */
+        }
+
+        .product-card .description {
+            font-size: 16px;
+            color: #666; /* Açıklama rengi */
+        }
+
+        .product-card .price {
+            font-size: 20px;
+            color: #e1652e; /* Fiyat rengi */
+            margin-top: 15px;
+        }
+
+        .product-card .add-to-cart {
+            background-color: #e1652e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .product-card .add-to-cart:hover {
+                background-color: #efaf82;
+            }
+
+    .read-more {
+        color: #007bff; /* Bağlantı rengi */
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div>
+    <br />
+    <section id="product-gallery" style="text-align: center; padding: 30px 0;">
+        <h2 style="font-size:32px">Search Results</h2>
+        <br />
+        <div class="search-bar" style="margin-bottom: 20px;">
+            <form action="@Url.Action("SearchProducts", "Home")" method="get">
+                <input type="text" name="search" placeholder="Search for products..." class="form-control" style="width: 300px; display: inline-block;" />
+                <button type="submit" class="btn btn-primary" style="margin-left: 10px;">Search</button>
+            </form>
+        </div>
+        @if (Model != null && Model.Any())
         {
-            <div class="col-md-4">
-                <div class="card, product">
-                    <img class="card-img-top" src="../@product.Image" alt="@product.Product_name" height="200">
-                    <div class="card-body">
-                        <h4 class="card-title" style="font-size:23px">
-                            <a href="/Home/Details/@product.Product_id"> @product.Product_name</a>
-                        </h4>
-                        <p class="card-text">
-                            @product.Description
-                        </p>
+            <div class="row">
+                @foreach (var product in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="card product-card" style="border-radius: 10px; box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1); background-color: #fff; margin: 20px; padding: 20px;">
+                            <img class="card-img-top" src="../@product.Image" alt="@product.Product_name" style="width: 200px; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 20px;">
+                            <div class="card-body">
+                                <h4 class="card-title" style="font-size: 24px; margin-bottom: 10px; color: #333;">
+                                    <a href="/Home/Details/@product.Product_id" style="text-decoration: none; color: #333;">@product.Product_name</a>
+                                </h4>
+                                <p class="card-text description" style="font-size: 16px; color: #666;">
+                                    @{
+                                        var description = product.Description;
+                                        var shortDescription = description.Length > maxDescriptionLength ? description.Substring(0, maxDescriptionLength) + "..." : description;
+                                    }
+                                    <span class="short-description">@shortDescription</span>
+                                    @if (description.Length > maxDescriptionLength)
+                                    {
+                                        <span class="full-description" style="display:none;">@description</span>
+                                        <a href="javascript:void(0);" class="read-more" onclick="toggleDescription(this)"> Continue to read</a>
+                                    }
+                                </p>
+                            </div>
+                            <div class="card-footer" style="font-size: 20px; color: #e1652e; margin-top: 15px;">
+                                Fiyat: $@product.Price
+                            </div>
+                            <div class="card-footer" style="background-color: #e1652e; color: #fff; border: none; border-radius: 5px; padding: 8px 16px; font-size: 18px; cursor: pointer; transition: background-color 0.3s ease;">
+                                <form method="post" action="@Url.Action("AddToOrderCart", "Cart", new { productId = product.Product_id, price = product.Price, amount = 1 })">
+                                    <input type="hidden" name="size" value="small" />
+                                    <button type="submit" class="fa fa-shopping-cart add-to-cart" style="font-size: 18px;"> Add To Cart</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-footer" style="font-size: 16px">
-                        Fiyat:$ @product.Price
-                    </div>
-                    <div class="card-footer">
-                        <br />
-                        <form method="post" action="@Url.Action("AddToOrderCart", "Cart", new { productId = product.Product_id, price = product.Price, amount = 1 })">
-                            <input type="hidden" name="size" value="small" />
-                            <button type="submit" class="fa fa-shopping-cart" style="font-size:20px; color:white; background-color:forestgreen; border-color:forestgreen"> Add To Cart</button>
-                        </form>
-                    </div>
-                </div>
+                }
             </div>
         }
-    }
-    else
-    {
-        <p>No search results available.</p>
-    }
+        else
+        {
+            <!-- If no search results found, display a message -->
+            <p>Sorry, the product you are looking for is not available on our site.</p>
+        }
+
+    </section>
 </div>
 
+
+@section Scripts {
+    <script>
+        function toggleDescription(element) {
+            var description = element.previousElementSibling;
+            var fullDescription = description.nextElementSibling;
+
+            if (description.style.display === "none") {
+                description.style.display = "inline";
+                element.innerText = " Continue to read";
+                fullDescription.style.display = "none";
+            } else {
+                description.style.display = "none";
+                element.innerText = " Show less";
+                fullDescription.style.display = "inline";
+            }
+        }
+    </script>
+}

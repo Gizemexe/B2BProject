@@ -132,6 +132,8 @@
     <Compile Include="Controllers\BuyerController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MessagesController.cs" />
+    <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\SellerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -142,6 +144,7 @@
     <Compile Include="Models\Categories.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CouponExpirationService.cs" />
     <Compile Include="Models\Coupons.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -260,6 +263,23 @@
     <Content Include="Views\Home\SearchProducts.cshtml" />
     <Content Include="Views\Cart\TotalCount.cshtml" />
     <Content Include="Views\Home\Details.cshtml" />
+    <Content Include="Views\Cart\GetOrderCartItems.cshtml" />
+    <Content Include="Views\Cart\OrderComplete.cshtml" />
+    <Content Include="Views\Home\GetRandomProducts.cshtml" />
+    <Content Include="Views\Seller\Coupons.cshtml" />
+    <Content Include="Views\Seller\AddCoupons.cshtml" />
+    <Content Include="Views\Seller\CheckStock.cshtml" />
+    <Content Include="Views\Seller\Products.cshtml" />
+    <Content Include="Views\Seller\Index.cshtml" />
+    <Content Include="Views\Seller\UpdateProducts.cshtml" />
+    <Content Include="Views\Orders\MyOrders.cshtml" />
+    <Content Include="Views\Orders\OrderDetails.cshtml" />
+    <Content Include="Views\Orders\Index.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\Category.cshtml" />
+    <Content Include="Views\Admin\Categories.cshtml" />
+    <Content Include="Views\Messages\SendMessage.cshtml" />
+    <Content Include="Views\Messages\Inbox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

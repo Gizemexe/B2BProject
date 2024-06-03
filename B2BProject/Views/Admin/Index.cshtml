@@ -1,0 +1,78 @@
+﻿@using B2BProject.Models
+@model IEnumerable<Orders>
+@{
+    ViewBag.Title = "Orders";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        table {
+            background-color: lemonchiffon;
+            margin: 5px auto;
+            border-collapse: collapse;
+            width: 90%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border: 2px solid gray;
+            border-radius: 15px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        th {
+            background-color: darkorange;
+        }
+    </style>
+</head>
+<body>
+    <br />
+    <br />
+    <br />
+    <h2>Orders</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer First Name</th>
+                <th>Customer Phone</th>
+                <th>Product Name</th>
+                <th>Amount</th>
+                <th>Total</th>
+                <th>Order Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                foreach (var detail in order.OrderDetails)
+                {
+                    <tr>
+                        <td>@order.Order_id</td>
+                        <td>@order.Users.Name</td>
+                        <td>@order.Users.Phone</td>
+                        <td>@detail.Products.Product_name</td>
+                        <td>@detail.Quantity</td>
+                        <td>@detail.Total</td>
+                        <td>@order.Date</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</body>
+</html>

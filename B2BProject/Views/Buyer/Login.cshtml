@@ -18,20 +18,18 @@
 
 <body>
     <div class="wrapper">
-        <h1>Buyer Login</h1>
+        <h1>Customer Login</h1>
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
 
             <div class="input-box">
-                @Html.LabelFor(model => model.Email)
                 @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "Buyer Email" } })
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
                 <i class='bx bxs-user-circle'></i>
             </div>
 
             <div class="input-box">
-                @Html.LabelFor(model => model.Password)
                 @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Buyer Password", type = "password" } })
                 @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                 <i class='bx bxs-lock-alt'></i>

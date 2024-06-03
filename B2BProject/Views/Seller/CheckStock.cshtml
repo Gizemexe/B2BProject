@@ -1,0 +1,58 @@
+﻿@using B2BProject.Models;
+@model IEnumerable<Products>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<head>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+    <br />
+    <br />
+    <br />
+    <h1 style="text-align:center">Stocks - Inventory</h1>
+
+    @if (TempData["Inventory"] != null && ((IEnumerable<Products>)TempData["Inventory"]).Any())
+    {
+        <table>
+            <tr>
+                <th>Product ID</th>
+                <th>Product Code</th>
+                <th>Product Name</th>
+                <th>Stock Information</th>
+            </tr>
+            @foreach (var item in (IEnumerable<Products>)TempData["Inventory"])
+            {
+                <tr>
+                    <td>@item.Product_id</td>
+                    <td>@item.Product_code</td>
+                    <td>@item.Product_name</td>
+                    <td>@item.Stock</td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <p>@ViewBag.Message</p>
+    }
+</body>
+</html>

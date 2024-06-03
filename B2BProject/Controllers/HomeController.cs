@@ -82,7 +82,7 @@ namespace B2BProject.Controllers
                 return View("SearchProducts", searchResults);
             }
         }
-
+        
         public ActionResult Categories(int id)
         {
             using (var entities = new B2BDbEntities())

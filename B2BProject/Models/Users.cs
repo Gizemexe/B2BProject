@@ -11,8 +11,7 @@ namespace B2BProject.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Users
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -30,12 +29,8 @@ namespace B2BProject.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Company_name { get; set; }
-       // [Required(ErrorMessage ="Email Required!")]
-        //[RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage ="Please enter a valid email address!")]
         public string Email { get; set; }
         public string Phone { get; set; }
-        //[Required(ErrorMessage ="Password is Required!")]
-        //[MinLength(8,ErrorMessage ="Password must consist of at least 8 characters!")]
         public string Password { get; set; }
         public int Rol_id { get; set; }
     
